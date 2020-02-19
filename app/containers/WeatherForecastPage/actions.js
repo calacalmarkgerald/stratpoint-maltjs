@@ -1,0 +1,39 @@
+/*
+ *
+ * WeatherForecastPage actions
+ *
+ */
+
+import {
+  DEFAULT_ACTION,
+  GET_WEATHER_FORECAST_START,
+  GET_WEATHER_FORECAST_SUCCESS,
+  GET_WEATHER_FORECAST_FAILED,
+} from './constants';
+
+export function defaultAction() {
+  return {
+    type: DEFAULT_ACTION,
+  };
+}
+
+export function getWeatherForecast() {
+  console.log('ACTION DISPATCHED');
+  return {
+    type: GET_WEATHER_FORECAST_START,
+  };
+}
+
+export function getWeatherForecastSuccess(forecasts) {
+  return {
+    type: GET_WEATHER_FORECAST_SUCCESS,
+    payload: forecasts,
+  };
+}
+
+export function getWeatherForecastFailed(error) {
+  return {
+    type: GET_WEATHER_FORECAST_FAILED,
+    payload: error,
+  };
+}

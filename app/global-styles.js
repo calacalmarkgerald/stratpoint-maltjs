@@ -19,6 +19,17 @@ const GlobalStyle = createGlobalStyle`
     background-color: #fafafa;
     min-height: 100%;
     min-width: 100%;
+    background: #f2994a; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      to right,
+      #f2c94c,
+      #f2994a
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to right,
+      #f2c94c,
+      #f2994a
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
 `;
 
