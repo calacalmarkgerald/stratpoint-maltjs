@@ -17,3 +17,11 @@ export const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+export const Header = styled.h1`
+  color: #fdfbfc;
+  font-size: 48px;
+  text-align: center;
+  line-height: 1.2;
+  font-weight: 400;
+`;

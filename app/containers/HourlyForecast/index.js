@@ -7,38 +7,65 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectHourlyForecast from './selectors';
-import reducer from './reducer';
-import saga from './saga';
-import messages from './messages';
+import {
+  WeatherContainer,
+  Container,
+  Layout,
+  Header,
+  SubHeader,
+  BackButton,
+} from './styles';
+import Weather from '../../components/Weather';
 
-export function HourlyForecast({ history }) {
-  useInjectReducer({ key: 'hourlyForecast', reducer });
-  useInjectSaga({ key: 'hourlyForecast', saga });
+import makeSelectHourlyForecast, { selectDateFromRouter } from './selectors';
 
+export function HourlyForecast({ history, hourlyForecast, date }) {
   const onClickHandler = useCallback(() => {
     history.push('/');
   }, [history]);
 
+  if (!date) {
+    history.push('/');
+  }
+
+  const displayDate = new Date(date).toDateString();
+
   return (
-    <div>
-      <button onClick={onClickHandler}>Back</button>
-    </div>
+    <Layout>
+      <Container>
+        <Header>Hourly Forecast</Header>
+        <SubHeader>{displayDate}</SubHeader>
+        <BackButton onClick={onClickHandler}>Back</BackButton>
+        <WeatherContainer>
+          {hourlyForecast.map(forecast => (
+            <Weather
+              key={forecast.day + forecast.time}
+              day={forecast.day}
+              time={forecast.time}
+              icon={forecast.icon}
+              minTemp={forecast.minTemp}
+              maxTemp={forecast.maxTemp}
+              mode="HOURLY"
+            />
+          ))}
+        </WeatherContainer>
+      </Container>
+    </Layout>
   );
 }
 
 HourlyForecast.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  hourlyForecast: PropTypes.array.isRequired,
+  date: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   hourlyForecast: makeSelectHourlyForecast(),
+  date: selectDateFromRouter,
 });
 
 function mapDispatchToProps(dispatch) {

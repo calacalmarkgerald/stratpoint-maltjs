@@ -12,7 +12,7 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { Typography, Spin } from 'antd';
+import { Typography } from 'antd';
 import makeSelectWeatherForecastPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -22,6 +22,7 @@ import { Layout, WeatherContainer, SpinnerContainer } from './styles';
 import Weather from '../../components/Weather';
 import Spinner from '../../components/Spinner';
 import { getWeatherForecast } from './actions';
+import { Header } from '../HourlyForecast/styles';
 
 const { Title } = Typography;
 
@@ -80,9 +81,7 @@ export function WeatherForecastPage({
   return (
     <Layout>
       <div>
-        <Title style={{ textAlign: 'center', color: '#fdfbfc' }}>
-          Weather Forecast
-        </Title>
+        <Header>Weather Forecast</Header>
         {dynamicComponent}
       </div>
     </Layout>

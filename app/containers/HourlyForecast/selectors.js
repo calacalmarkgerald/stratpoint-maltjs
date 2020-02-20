@@ -1,26 +1,29 @@
 import { createSelector } from 'reselect';
-import { initialState } from './reducer';
-
-/**
- * Direct selector to the hourlyForecast state domain
- */
-
-const selectHourlyForecastDomain = state =>
-  state.hourlyForecast || initialState;
+import { selectWeatherForecastPageDomain } from '../WeatherForecastPage/selectors';
 
 /**
  * Other specific selectors
  */
-
+export const selectDateFromRouter = state => {
+  const queryParams = new URLSearchParams(state.router.location.search);
+  return queryParams.get('date');
+};
 /**
  * Default selector used by HourlyForecast
  */
 
 const makeSelectHourlyForecast = () =>
   createSelector(
-    selectHourlyForecastDomain,
-    substate => substate,
+    selectWeatherForecastPageDomain,
+    selectDateFromRouter,
+    (weatherForecastPage, date) => {
+      let forecasts;
+      if (date && weatherForecastPage.forecasts) {
+        forecasts = weatherForecastPage.forecasts[date].hourlyForecasts;
+      }
+
+      return forecasts;
+    },
   );
 
 export default makeSelectHourlyForecast;
-export { selectHourlyForecastDomain };
