@@ -12,19 +12,23 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { Typography } from 'antd';
+import { Empty } from 'antd';
 import makeSelectWeatherForecastPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
-import { Layout, WeatherContainer, SpinnerContainer } from './styles';
+import {
+  Layout,
+  WeatherContainer,
+  SpinnerContainer,
+  InputContainer,
+} from './styles';
 
 import Weather from '../../components/Weather';
 import Spinner from '../../components/Spinner';
+import Input from '../../components/Input';
 import { getWeatherForecast } from './actions';
 import { Header } from '../HourlyForecast/styles';
-
-const { Title } = Typography;
 
 export function WeatherForecastPage({
   dispatch,
@@ -51,17 +55,21 @@ export function WeatherForecastPage({
     [history],
   );
 
-  const { loading, forecasts } = weatherForecastPage;
+  const onSearchHandler = useCallback(city => {
+    dispatch(getWeatherForecast(city));
+  }, []);
+
+  const { loading, forecasts, city } = weatherForecastPage;
 
   let dynamicComponent;
 
-  if (loading || forecasts === null) {
+  if (loading) {
     dynamicComponent = (
       <SpinnerContainer>
         <Spinner />
       </SpinnerContainer>
     );
-  } else {
+  } else if (forecasts) {
     dynamicComponent = (
       <WeatherContainer>
         {Object.keys(forecasts).map(key => (
@@ -76,12 +84,21 @@ export function WeatherForecastPage({
         ))}
       </WeatherContainer>
     );
+  } else {
+    dynamicComponent = <Empty description="No weather data" />;
   }
 
   return (
     <Layout>
       <div>
         <Header>Weather Forecast</Header>
+        <InputContainer>
+          <Input
+            name="city"
+            placeholder="Search a city"
+            onSearch={onSearchHandler}
+          />
+        </InputContainer>
         {dynamicComponent}
       </div>
     </Layout>

@@ -17,10 +17,14 @@ export function defaultAction() {
   };
 }
 
-export function getWeatherForecast() {
-  console.log('ACTION DISPATCHED');
+export function getWeatherForecast(city, units, count) {
   return {
     type: GET_WEATHER_FORECAST_START,
+    payload: {
+      city,
+      units,
+      count,
+    },
   };
 }
 

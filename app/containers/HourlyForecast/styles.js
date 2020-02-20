@@ -9,6 +9,12 @@ export const Layout = styled.div`
 
 export const Container = styled.div`
   position: relative;
+  min-width: 800px;
+
+  @media (max-width: 799px) {
+    min-width: 500px;
+    padding-top: 60px;
+  }
 `;
 
 export const WeatherContainer = styled.div`

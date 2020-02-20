@@ -1,6 +1,7 @@
-import { takeLatest, put, all } from 'redux-saga/effects';
+import { takeLatest, put, all, select } from 'redux-saga/effects';
 import axios from 'axios';
 
+import { selectWeatherForecastPageDomain } from './selectors';
 import { getFormattedDate, getFormattedTime } from '../../utils/dateFormatter';
 import {
   WEATHER_API_URL,
@@ -17,25 +18,26 @@ export default function* weatherForecastPageSaga() {
 }
 
 export function* getWeatherForecasts() {
-  const city = 'Manila';
-  const units = 'metric';
-  const cnt = 40;
+  const { city, units, count } = yield select(selectWeatherForecastPageDomain);
 
   try {
     const response = yield axios.get(
-      `${WEATHER_API_URL}?q=${city}&units=${units}&cnt=${cnt}&appid=${APP_ID}`,
+      `${WEATHER_API_URL}?q=${city}&units=${units}&cnt=${count}&appid=${APP_ID}`,
     );
 
     const newWeatherForecasts = {};
     response.data.list.reduce((prev, curr) => {
       const date = getFormattedDate(new Date(curr.dt * 1000));
-
+      const time = getFormattedTime(new Date(curr.dt * 1000));
       /* eslint-disable no-prototype-builtins, no-param-reassign */
       if (!prev.hasOwnProperty(date)) {
         prev[date] = mapWeatherForecastResponse(curr);
         prev[date].hourlyForecasts = [];
+        prev[date].hourlyForecasts.push({
+          ...mapWeatherForecastResponse(curr),
+          time,
+        });
       } else {
-        const time = getFormattedTime(new Date(curr.dt * 1000));
         prev[date].hourlyForecasts.push({
           ...mapWeatherForecastResponse(curr),
           time,

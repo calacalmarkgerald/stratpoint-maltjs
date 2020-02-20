@@ -7,6 +7,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
@@ -20,24 +21,26 @@ import {
 } from './styles';
 import Weather from '../../components/Weather';
 
-import makeSelectHourlyForecast, { selectDateFromRouter } from './selectors';
+import makeSelectHourlyForecast, {
+  selectDateFromRouter,
+  selectCity,
+} from './selectors';
 
-export function HourlyForecast({ history, hourlyForecast, date }) {
+export function HourlyForecast({ history, hourlyForecast, date, city }) {
   const onClickHandler = useCallback(() => {
     history.push('/');
   }, [history]);
 
-  if (!date) {
-    history.push('/');
+  if (!date || !hourlyForecast) {
+    return <Redirect to="/" />;
   }
 
   const displayDate = new Date(date).toDateString();
-
   return (
     <Layout>
       <Container>
-        <Header>Hourly Forecast</Header>
-        <SubHeader>{displayDate}</SubHeader>
+        <Header>{city}</Header>
+        <SubHeader>Hourly Forecast - {displayDate}</SubHeader>
         <BackButton onClick={onClickHandler}>Back</BackButton>
         <WeatherContainer>
           {hourlyForecast.map(forecast => (
@@ -59,13 +62,15 @@ export function HourlyForecast({ history, hourlyForecast, date }) {
 
 HourlyForecast.propTypes = {
   history: PropTypes.object.isRequired,
-  hourlyForecast: PropTypes.array.isRequired,
-  date: PropTypes.string.isRequired,
+  hourlyForecast: PropTypes.array,
+  date: PropTypes.string,
+  city: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
   hourlyForecast: makeSelectHourlyForecast(),
   date: selectDateFromRouter,
+  city: selectCity,
 });
 
 function mapDispatchToProps(dispatch) {

@@ -8,6 +8,9 @@ export const selectDateFromRouter = state => {
   const queryParams = new URLSearchParams(state.router.location.search);
   return queryParams.get('date');
 };
+
+export const selectCity = state =>
+  state.weatherForecastPage ? state.weatherForecastPage.city : null;
 /**
  * Default selector used by HourlyForecast
  */
