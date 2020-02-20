@@ -20,6 +20,7 @@ import saga from './saga';
 import { Layout, WeatherContainer, SpinnerContainer } from './styles';
 
 import Weather from '../../components/Weather';
+import Spinner from '../../components/Spinner';
 import { getWeatherForecast } from './actions';
 
 const { Title } = Typography;
@@ -56,7 +57,7 @@ export function WeatherForecastPage({
   if (loading || forecasts === null) {
     dynamicComponent = (
       <SpinnerContainer>
-        <Spin size="large" style={{ height: '100px', width: '100px' }} />
+        <Spinner />
       </SpinnerContainer>
     );
   } else {
