@@ -85,7 +85,7 @@ export function WeatherForecastPage({
       </WeatherContainer>
     );
   } else {
-    dynamicComponent = <Empty description="No weather data" />;
+    dynamicComponent = <Empty description="No weather data found" />;
   }
 
   return (
