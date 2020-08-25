@@ -59,7 +59,7 @@ export function WeatherForecastPage({
     dispatch(getWeatherForecast(city));
   }, []);
 
-  const { loading, forecasts, city } = weatherForecastPage;
+  const { loading, forecasts } = weatherForecastPage;
 
   let dynamicComponent;
 
